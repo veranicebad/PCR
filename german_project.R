@@ -169,6 +169,8 @@ samplGibs<-function(a0,b0,data)
   b_min=0
   a_max=15
   b_max=15
+  a_ans=0
+  b_ans=0
   a=a0
   b=b0
     for(j in 1:n){
