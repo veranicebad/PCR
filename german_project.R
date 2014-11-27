@@ -30,7 +30,7 @@ xyplot(y ~ x, data = d) + layer_(panel.lmpolyline(...,col.line = 134, degree = 2
 
 fit_realdata<-function()
 {
-  mydata <- read.table("c:/Users/Vera/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
+  mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
   den<-density(as.numeric(mydata[mydata$Target == "AMPL661570029",]))
   d<-data.frame(x=den$x,y=den$y)
   print(d)
@@ -55,7 +55,7 @@ fit_realdata<-function()
 plot_real_data<-function()
 {
   #jpeg('rplot1.jpg')
-  mydata <- read.table("c:/Users/Vera/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
+  mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
   #plot(mydata$IonXpress_14_015, mydata$IonXpress_14_016)
   #plot(as.numeric(mydata[mydata$Target == "AMPL1380948436",]), as.numeric(mydata[mydata$Target == "AMPL655136916",]))
   plot(density(as.numeric(mydata[mydata$Target == "AMPL661570029",])), xlab = "Number of amplicons", ylab = "density", main = "Density plot of real data")
@@ -69,15 +69,67 @@ plot_real_data<-function()
   #dev.off()
 }
 
+remove_deletions_from_real_data<-function(){
+  mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
+  mydata$IonXpress_17_013<-NULL
+  mydata$IonXpress_17_021<-NULL
+  mydata$IonXpress_17_045<-NULL
+  mydata$IonXpress_18_042<-NULL
+  mydata$IonXpress_18_044<-NULL
+  mydata$IonXpress_18_046<-NULL
+  mydata$IonXpress_18_001<-NULL
+  mydata$IonXpress_19_037<-NULL
+  mydata$IonXpress_20_012<-NULL
+  mydata$IonXpress_20_016<-NULL
+  return(mydata)
+}
+
+plot_parAB_real_data<-function(){
+  mydata<-remove_deletions_from_real_data()
+  run_20<-mydata[, grep("IonXpress_20", colnames(mydata))]
+  run_17<-mydata[, grep("IonXpress_17", colnames(mydata))]
+  run_18<-mydata[, grep("IonXpress_18", colnames(mydata))]
+  run_19<-mydata[, grep("IonXpress_19", colnames(mydata))]
+  run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
+  run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
+  run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
+  plot(0,0,col='white',xlim=c(0,10),ylim=c(0,10))
+  for(i in 1:nrow(mydata)){
+    amp_i_run_14 <- as.numeric(run_14[i,])
+    amp_i_run_15 <- as.numeric(run_15[i,])
+    amp_i_run_16 <- as.numeric(run_16[i,])
+    amp_i_run_17 <- as.numeric(run_17[i,])
+    amp_i_run_18 <- as.numeric(run_18[i,])
+    amp_i_run_19 <- as.numeric(run_19[i,])
+    amp_i_run_20 <- as.numeric(run_20[i,])
+    ab_amp_i_run_14<-nsamplGibs(1, amp_i_run_14)
+    ab_amp_i_run_15<-nsamplGibs(1, amp_i_run_15)
+    ab_amp_i_run_16<-nsamplGibs(1, amp_i_run_16)
+    ab_amp_i_run_17<-nsamplGibs(1, amp_i_run_17)
+    ab_amp_i_run_18<-nsamplGibs(1, amp_i_run_18)
+    ab_amp_i_run_19<-nsamplGibs(1, amp_i_run_19)
+    ab_amp_i_run_20<-nsamplGibs(1, amp_i_run_20)
+    points(ab_amp_i_run_14, pch=16, col="red")
+    points(ab_amp_i_run_15, pch=16, col="orange")
+    points(ab_amp_i_run_16, pch=16, col="yellow")
+    points(ab_amp_i_run_17, pch=16, col="green")
+    points(ab_amp_i_run_18, pch=16, col="cyan")
+    points(ab_amp_i_run_19, pch=16, col="blue")
+    points(ab_amp_i_run_20, pch=16, col="violet")
+  }
+  #as.numeric(mydata[mydata$Target == "AMPL661570029",mydata$Gene=='']
+}
+
 nsamplGibs<-function(n, data){
+  library(e1071) 
   mean_data<-mean(data)
   std_data<-sd(data)  
   skewness_data<-skewness(data)
   kurtosis_data<-kurtosis(data)
   a_min=0
   b_min=0
-  a_max=1
-  b_max=1
+  a_max=10
+  b_max=10
   best_r=1000
   for(i in 1:n){
     a0=runif(1,min=a_min, max=a_max)
@@ -88,7 +140,7 @@ nsamplGibs<-function(n, data){
     sd_sample<-sd(data_sample)
     skewness_sample<-skewness(data_sample)
     kurtosis_sample<-kurtosis(data_sample)
-    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)#+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
     if(r<=best_r)
     {
       best_r <- r
@@ -113,8 +165,8 @@ samplGibs<-function(a0,b0,data)
   r = 1000
   a_min=0
   b_min=0
-  a_max=1
-  b_max=1
+  a_max=10
+  b_max=10
   a=a0
   b=b0
     for(j in 1:n){
@@ -144,7 +196,7 @@ samplGibs<-function(a0,b0,data)
       skewness_sample<-skewness_sample/m      
       kurtosis_sample<-kurtosis_sample/m
       r_pr<-r
-      r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)
+      r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
       if(r<=best_r)
       {
         best_r <- r
