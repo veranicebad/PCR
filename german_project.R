@@ -142,7 +142,7 @@ nsamplGibs<-function(n, data){
     sd_sample<-sd(data_sample)
     skewness_sample<-skewness(data_sample)
     kurtosis_sample<-kurtosis(data_sample)
-    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)#+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
     if(r<=best_r)
     {
       best_r <- r
