@@ -93,7 +93,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,10),ylim=c(0,10))
+  plot(0,0,col='white',xlim=c(0,15),ylim=c(0,15))
   for(i in 1:nrow(mydata)){
     amp_i_run_14 <- as.numeric(run_14[i,])
     amp_i_run_15 <- as.numeric(run_15[i,])
@@ -117,7 +117,6 @@ plot_parAB_real_data<-function(){
     points(ab_amp_i_run_19, pch=16, col="blue")
     points(ab_amp_i_run_20, pch=16, col="violet")
   }
-  #as.numeric(mydata[mydata$Target == "AMPL661570029",mydata$Gene=='']
 }
 
 nsamplGibs<-function(n, data){
@@ -128,9 +127,12 @@ nsamplGibs<-function(n, data){
   kurtosis_data<-kurtosis(data)
   a_min=0
   b_min=0
-  a_max=10
-  b_max=10
+  a_max=15
+  b_max=15
+  a_ans=0
+  b_ans=0
   best_r=1000
+  
   for(i in 1:n){
     a0=runif(1,min=a_min, max=a_max)
     b0=runif(1,min=b_min, max=b_max)
@@ -165,8 +167,8 @@ samplGibs<-function(a0,b0,data)
   r = 1000
   a_min=0
   b_min=0
-  a_max=10
-  b_max=10
+  a_max=15
+  b_max=15
   a=a0
   b=b0
     for(j in 1:n){
