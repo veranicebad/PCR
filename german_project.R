@@ -109,13 +109,13 @@ plot_parAB_real_data<-function(){
     ab_amp_i_run_18<-nsamplGibs(1, amp_i_run_18)
     ab_amp_i_run_19<-nsamplGibs(1, amp_i_run_19)
     ab_amp_i_run_20<-nsamplGibs(1, amp_i_run_20)
-    points(ab_amp_i_run_14, pch=16, col="red")
-    points(ab_amp_i_run_15, pch=16, col="orange")
-    points(ab_amp_i_run_16, pch=16, col="yellow")
-    points(ab_amp_i_run_17, pch=16, col="green")
-    points(ab_amp_i_run_18, pch=16, col="cyan")
-    points(ab_amp_i_run_19, pch=16, col="blue")
-    points(ab_amp_i_run_20, pch=16, col="violet")
+    points(ab_amp_i_run_14[1],ab_amp_i_run_14[2], pch=16, col="red")
+    points(ab_amp_i_run_15[1],ab_amp_i_run_15[2], pch=16, col="orange")
+    points(ab_amp_i_run_16[1],ab_amp_i_run_16[2], pch=16, col="yellow")
+    points(ab_amp_i_run_17[1],ab_amp_i_run_17[2], pch=16, col="green")
+    points(ab_amp_i_run_18[1],ab_amp_i_run_18[2], pch=16, col="cyan")
+    points(ab_amp_i_run_19[1], ab_amp_i_run_19[2],pch=16, col="blue")
+    points(ab_amp_i_run_20[1],ab_amp_i_run_20[2], pch=16, col="violet")
   }
 }
 
