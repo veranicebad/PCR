@@ -52,7 +52,7 @@ fit_realdata<-function()
   #abline(fit)
 }
 
-plot_real_data<-function()
+plot_reaSl_data<-function()
 {
   #jpeg('rplot1.jpg')
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
@@ -84,6 +84,7 @@ remove_deletions_from_real_data<-function(){
   return(mydata)
 }
 
+
 plot_parAB_real_data<-function(){
   mydata<-remove_deletions_from_real_data()
   run_20<-mydata[, grep("IonXpress_20", colnames(mydata))]
@@ -93,7 +94,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,5),ylim=c(0,15))
+  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,15))
   for(i in 1:nrow(mydata)){
     amp_i_run_14 <- as.numeric(run_14[i,])
     amp_i_run_15 <- as.numeric(run_15[i,])
@@ -127,7 +128,7 @@ nsamplGibs<-function(n, data){
   kurtosis_data<-kurtosis(data)
   a_min=0
   b_min=0
-  a_max=5
+  a_max=2
   b_max=15
   a_ans=0
   b_ans=0
@@ -167,7 +168,7 @@ samplGibs<-function(a0,b0,data)
   r = 1000
   a_min=0
   b_min=0
-  a_max=5
+  a_max=2
   b_max=15
   a_ans=0
   b_ans=0
