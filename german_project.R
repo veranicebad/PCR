@@ -71,6 +71,7 @@ plot_reaSl_data<-function()
 
 remove_deletions_from_real_data<-function(){
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
+  normalization(mydata)
   mydata$IonXpress_17_013<-NULL
   mydata$IonXpress_17_021<-NULL
   mydata$IonXpress_17_045<-NULL
@@ -82,6 +83,15 @@ remove_deletions_from_real_data<-function(){
   mydata$IonXpress_20_012<-NULL
   mydata$IonXpress_20_016<-NULL
   return(mydata)
+}
+
+get_deletions_from_real_data<-function(){
+  mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
+  normalization(mydata)
+  data_without_del<-remove_deletions_from_real_data()
+  data <- mydata
+  data<-data[,-which(names(data) %in% names(data_without_del))]
+  return(data)
 }
 
 normalization<-function(data){
@@ -103,32 +113,47 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,50))
+  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,150))
   run_20_ab<-c()
+  run_19_ab<-c()
+  run_18_ab<-c()
+  run_17_ab<-c()
+  run_16_ab<-c()
+  run_15_ab<-c()
+  run_14_ab<-c()
   for(i in 1:nrow(mydata)){
-    #amp_i_run_14 <- as.numeric(run_14[i,])
-    #amp_i_run_15 <- as.numeric(run_15[i,])
-    #amp_i_run_16 <- as.numeric(run_16[i,])
-    #amp_i_run_17 <- as.numeric(run_17[i,])
-    #amp_i_run_18 <- as.numeric(run_18[i,])
-    #amp_i_run_19 <- as.numeric(run_19[i,])
+    amp_i_run_14 <- as.numeric(run_14[i,])
+    amp_i_run_15 <- as.numeric(run_15[i,])
+    amp_i_run_16 <- as.numeric(run_16[i,])
+    amp_i_run_17 <- as.numeric(run_17[i,])
+    amp_i_run_18 <- as.numeric(run_18[i,])
+    amp_i_run_19 <- as.numeric(run_19[i,])
     amp_i_run_20 <- as.numeric(run_20[i,])
-    #ab_amp_i_run_14<-nsamplGibs(1, amp_i_run_14)
-    #ab_amp_i_run_15<-nsamplGibs(1, amp_i_run_15)
-    #ab_amp_i_run_16<-nsamplGibs(1, amp_i_run_16)
-    #ab_amp_i_run_17<-nsamplGibs(1, amp_i_run_17)
-    #ab_amp_i_run_18<-nsamplGibs(1, amp_i_run_18)
-    #ab_amp_i_run_19<-nsamplGibs(1, amp_i_run_19)
-    ab_amp_i_run_20<-nsamplGibs(1, amp_i_run_20)
+    ab_amp_i_run_14<-nsamplGibs_a_b(1, amp_i_run_14,1)
+    ab_amp_i_run_15<-nsamplGibs_a_b(1, amp_i_run_15,1)
+    ab_amp_i_run_16<-nsamplGibs_a_b(1, amp_i_run_16,1)
+    ab_amp_i_run_17<-nsamplGibs_a_b(1, amp_i_run_17,1)
+    ab_amp_i_run_18<-nsamplGibs_a_b(1, amp_i_run_18,1)
+    ab_amp_i_run_19<-nsamplGibs_a_b(1, amp_i_run_19,1)
+    ab_amp_i_run_20<-nsamplGibs_a_b(1, amp_i_run_20,1)
     run_20_ab<-c(run_20_ab, ab_amp_i_run_20)
-    #points(ab_amp_i_run_14[1],ab_amp_i_run_14[2], pch=16, col="red")
-    #points(ab_amp_i_run_15[1],ab_amp_i_run_15[2], pch=16, col="orange")
-    #points(ab_amp_i_run_16[1],ab_amp_i_run_16[2], pch=16, col="yellow")
-    #points(ab_amp_i_run_17[1],ab_amp_i_run_17[2], pch=16, col="green")
-    #points(ab_amp_i_run_18[1],ab_amp_i_run_18[2], pch=16, col="cyan")
-    #points(ab_amp_i_run_19[1], ab_amp_i_run_19[2],pch=16, col="blue")
+    run_19_ab<-c(run_19_ab, ab_amp_i_run_19)
+    run_18_ab<-c(run_18_ab, ab_amp_i_run_19)
+    run_17_ab<-c(run_17_ab, ab_amp_i_run_19)
+    run_16_ab<-c(run_16_ab, ab_amp_i_run_19)
+    run_15_ab<-c(run_15_ab, ab_amp_i_run_19)
+    run_14_ab<-c(run_14_ab, ab_amp_i_run_19)
+    points(ab_amp_i_run_14[1],ab_amp_i_run_14[2], pch=16, col="red")
+    points(ab_amp_i_run_15[1],ab_amp_i_run_15[2], pch=16, col="orange")
+    points(ab_amp_i_run_16[1],ab_amp_i_run_16[2], pch=16, col="yellow")
+    points(ab_amp_i_run_17[1],ab_amp_i_run_17[2], pch=16, col="green")
+    points(ab_amp_i_run_18[1],ab_amp_i_run_18[2], pch=16, col="cyan")
+    points(ab_amp_i_run_19[1], ab_amp_i_run_19[2],pch=16, col="blue")
     points(ab_amp_i_run_20[1],ab_amp_i_run_20[2], pch=16, col="violet")
   }
+  run_20_19_18_17_16_15_14_ab<-c(run_20_ab, run_19_ab, run_18_ab, run_17_ab,
+                                 run_16_ab, run_15_ab, run_14_ab)
+  return(run_20_19_18_17_16_15_14_ab)
 }
 
 nsamplGibs_a_b<-function(n, data,N0){
@@ -140,7 +165,7 @@ nsamplGibs_a_b<-function(n, data,N0){
   a_min=0
   b_min=0
   a_max=2
-  b_max=50
+  b_max=150
   a_ans=0
   b_ans=0
   best_r=1000
@@ -183,7 +208,7 @@ samplGibs_a_b<-function(a0,b0,data,N0)
   a_min=0
   b_min=0
   a_max=2
-  b_max=50
+  b_max=150
   a_ans=0
   b_ans=0
   a=a0
@@ -251,7 +276,7 @@ nsamplGibs_N0<-function(n, data,a,b){
   skewness_data<-skewness(data)
   kurtosis_data<-kurtosis(data)
   N0_min=0
-  N0_max=2
+  N0_max=10
   N0_ans=0
   best_r=1000
   
@@ -278,8 +303,8 @@ nsamplGibs_N0<-function(n, data,a,b){
 
 samplGibs_N0<-function(N0_0,data,a,b)
 {
-  n=100
-  m=100
+  n=50
+  m=50
   mean_data<-mean(data)
   std_data<-sd(data)
   skewness_data<-skewness(data)
@@ -287,7 +312,7 @@ samplGibs_N0<-function(N0_0,data,a,b)
   best_r=1000
   r = 1000
   N0_min=0
-  N0_max=20
+  N0_max=10
   N0_ans=0
   N0=N0_0
   prev_N0<-N0
@@ -332,13 +357,36 @@ samplGibs_N0<-function(N0_0,data,a,b)
   ans<-N0_ans
 }
 
+get_N0<-function(a,b,N)
+{
+  N0_min<-1
+  N0_max=100
+  rmin<-1000
+  N0<-N0_min
+  for(i in N0_min:N0_max){
+    val<-get_Y_2(a,b,i)
+    mean_val<-mean(val)
+    r<-abs(N-mean_val)
+    if(r<rmin){
+      N0<-i
+      rmin<-r
+    }
+    print(rmin)
+  }
+  return(N0)
+}
+
+get_N0_for_deletion(){
+  get_deletions_from_real_data()
+}
+
 get_Y_2<-function(a,b,N0)
 {
   #jpeg('rplot.jpg')
   #p<-0.95
   lst1 <- c()
   y0<-N0
-  for (i in 1:100)
+  for (i in 1:50)
   {
     scale <- rnorm(1, 0, 0.65) + 2
     y <- y0* scale #+ rnorm(1, 0, 0.005)
