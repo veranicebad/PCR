@@ -154,7 +154,10 @@ nsamplGibs_a_b<-function(n, data,N0){
     sd_sample<-sd(data_sample)
     skewness_sample<-skewness(data_sample)
     kurtosis_sample<-kurtosis(data_sample)
-    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+
+      abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)++
+      abs(as.numeric(quantile(data_sample,0.025))-as.numeric(quantile(data,0.025)))
+    +abs(as.numeric(quantile(data_sample,0.975))-as.numeric(quantile(data,0.975)))
     if(r<=best_r)
     {
       best_r <- r
@@ -212,7 +215,10 @@ samplGibs_a_b<-function(a0,b0,data,N0)
       skewness_sample<-skewness_sample/m      
       kurtosis_sample<-kurtosis_sample/m
       r_pr<-r
-      r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+      r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+
+        abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+
+        abs(as.numeric(quantile(data_sample,0.025))-as.numeric(quantile(data,0.025)))
+      +abs(as.numeric(quantile(data_sample,0.975))-as.numeric(quantile(data,0.975)))
       if(r<=best_r)
       {
         best_r <- r
@@ -257,14 +263,17 @@ nsamplGibs_N0<-function(n, data,a,b){
     sd_sample<-sd(data_sample)
     skewness_sample<-skewness(data_sample)
     kurtosis_sample<-kurtosis(data_sample)
-    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+
+      abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+
+      abs(as.numeric(quantile(data_sample,0.025))-as.numeric(quantile(data,0.025)))
+    +abs(as.numeric(quantile(data_sample,0.975))-as.numeric(quantile(data,0.975)))
     if(r<=best_r)
     {
       best_r <- r
       N0_ans=N0
     }
   }
-  ans<-N0
+  ans<-N0_ans
 }
 
 samplGibs_N0<-function(N0_0,data,a,b)
@@ -281,11 +290,10 @@ samplGibs_N0<-function(N0_0,data,a,b)
   N0_max=20
   N0_ans=0
   N0=N0_0
+  prev_N0<-N0
   for(j in 1:n){
     print(best_r)
     print(j)
-    prev_N0 = N0
-    N0=runif(1,min=N0_min, max=N0_max)
     mean_sample<-0
     sd_sample<-0
     skewness_sample<-0
@@ -302,7 +310,10 @@ samplGibs_N0<-function(N0_0,data,a,b)
     skewness_sample<-skewness_sample/m      
     kurtosis_sample<-kurtosis_sample/m
     r_pr<-r
-    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+
+      abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+
+      abs(as.numeric(quantile(data_sample,0.025))-as.numeric(quantile(data,0.025)))
+    +abs(as.numeric(quantile(data_sample,0.975))-as.numeric(quantile(data,0.975)))
     if(r<=best_r)
     {
       best_r <- r
@@ -314,8 +325,11 @@ samplGibs_N0<-function(N0_0,data,a,b)
     {
       N0 = prev_N0
     }
+    prev_N0 = N0
+    N0=runif(1,min=N0_min, max=N0_max)
+    
   }
-  ans<-N0
+  ans<-N0_ans
 }
 
 get_Y_2<-function(a,b,N0)
