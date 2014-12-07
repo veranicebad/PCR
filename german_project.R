@@ -30,7 +30,7 @@ xyplot(y ~ x, data = d) + layer_(panel.lmpolyline(...,col.line = 134, degree = 2
 
 fit_realdata<-function()
 {
-  mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
+  mydata <- read.table("c:/Users/Vera/Documents/научкa/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
   den<-density(as.numeric(mydata[mydata$Target == "AMPL661570029",]))
   d<-data.frame(x=den$x,y=den$y)
   print(d)
@@ -84,6 +84,15 @@ remove_deletions_from_real_data<-function(){
   return(mydata)
 }
 
+normalization<-function(data){
+  cs<-colSums(data[,3:ncol(data)])
+  newdata <-data[,3:ncol(data)]
+  for(i in 1:ncol(newdata)){
+      newdata[,i]<-newdata[,i]*100/cs[i]
+  }
+  data[,3:ncol(data)] <- newdata
+  return(data)
+}
 
 plot_parAB_real_data<-function(){
   mydata<-remove_deletions_from_real_data()
@@ -94,33 +103,35 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,15))
+  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,50))
+  run_20_ab<-c()
   for(i in 1:nrow(mydata)){
-    amp_i_run_14 <- as.numeric(run_14[i,])
-    amp_i_run_15 <- as.numeric(run_15[i,])
-    amp_i_run_16 <- as.numeric(run_16[i,])
-    amp_i_run_17 <- as.numeric(run_17[i,])
-    amp_i_run_18 <- as.numeric(run_18[i,])
-    amp_i_run_19 <- as.numeric(run_19[i,])
+    #amp_i_run_14 <- as.numeric(run_14[i,])
+    #amp_i_run_15 <- as.numeric(run_15[i,])
+    #amp_i_run_16 <- as.numeric(run_16[i,])
+    #amp_i_run_17 <- as.numeric(run_17[i,])
+    #amp_i_run_18 <- as.numeric(run_18[i,])
+    #amp_i_run_19 <- as.numeric(run_19[i,])
     amp_i_run_20 <- as.numeric(run_20[i,])
-    ab_amp_i_run_14<-nsamplGibs(1, amp_i_run_14)
-    ab_amp_i_run_15<-nsamplGibs(1, amp_i_run_15)
-    ab_amp_i_run_16<-nsamplGibs(1, amp_i_run_16)
-    ab_amp_i_run_17<-nsamplGibs(1, amp_i_run_17)
-    ab_amp_i_run_18<-nsamplGibs(1, amp_i_run_18)
-    ab_amp_i_run_19<-nsamplGibs(1, amp_i_run_19)
+    #ab_amp_i_run_14<-nsamplGibs(1, amp_i_run_14)
+    #ab_amp_i_run_15<-nsamplGibs(1, amp_i_run_15)
+    #ab_amp_i_run_16<-nsamplGibs(1, amp_i_run_16)
+    #ab_amp_i_run_17<-nsamplGibs(1, amp_i_run_17)
+    #ab_amp_i_run_18<-nsamplGibs(1, amp_i_run_18)
+    #ab_amp_i_run_19<-nsamplGibs(1, amp_i_run_19)
     ab_amp_i_run_20<-nsamplGibs(1, amp_i_run_20)
-    points(ab_amp_i_run_14[1],ab_amp_i_run_14[2], pch=16, col="red")
-    points(ab_amp_i_run_15[1],ab_amp_i_run_15[2], pch=16, col="orange")
-    points(ab_amp_i_run_16[1],ab_amp_i_run_16[2], pch=16, col="yellow")
-    points(ab_amp_i_run_17[1],ab_amp_i_run_17[2], pch=16, col="green")
-    points(ab_amp_i_run_18[1],ab_amp_i_run_18[2], pch=16, col="cyan")
-    points(ab_amp_i_run_19[1], ab_amp_i_run_19[2],pch=16, col="blue")
+    run_20_ab<-c(run_20_ab, ab_amp_i_run_20)
+    #points(ab_amp_i_run_14[1],ab_amp_i_run_14[2], pch=16, col="red")
+    #points(ab_amp_i_run_15[1],ab_amp_i_run_15[2], pch=16, col="orange")
+    #points(ab_amp_i_run_16[1],ab_amp_i_run_16[2], pch=16, col="yellow")
+    #points(ab_amp_i_run_17[1],ab_amp_i_run_17[2], pch=16, col="green")
+    #points(ab_amp_i_run_18[1],ab_amp_i_run_18[2], pch=16, col="cyan")
+    #points(ab_amp_i_run_19[1], ab_amp_i_run_19[2],pch=16, col="blue")
     points(ab_amp_i_run_20[1],ab_amp_i_run_20[2], pch=16, col="violet")
   }
 }
 
-nsamplGibs<-function(n, data){
+nsamplGibs_a_b<-function(n, data,N0){
   library(e1071) 
   mean_data<-mean(data)
   std_data<-sd(data)  
@@ -129,7 +140,7 @@ nsamplGibs<-function(n, data){
   a_min=0
   b_min=0
   a_max=2
-  b_max=15
+  b_max=50
   a_ans=0
   b_ans=0
   best_r=1000
@@ -137,8 +148,8 @@ nsamplGibs<-function(n, data){
   for(i in 1:n){
     a0=runif(1,min=a_min, max=a_max)
     b0=runif(1,min=b_min, max=b_max)
-    ab<-samplGibs(a0,b0,data)
-    data_sample=get_Y_2(ab[1],ab[2])
+    ab<-samplGibs_a_b(a0,b0,data,N0)
+    data_sample=get_Y_2(ab[1],ab[2],N0)
     mean_sample<-mean(data_sample)    
     sd_sample<-sd(data_sample)
     skewness_sample<-skewness(data_sample)
@@ -156,7 +167,7 @@ nsamplGibs<-function(n, data){
   ans<-c(ans,b_ans)
 }
 
-samplGibs<-function(a0,b0,data)
+samplGibs_a_b<-function(a0,b0,data,N0)
 {
   n=100
   m=100
@@ -169,7 +180,7 @@ samplGibs<-function(a0,b0,data)
   a_min=0
   b_min=0
   a_max=2
-  b_max=15
+  b_max=50
   a_ans=0
   b_ans=0
   a=a0
@@ -190,7 +201,7 @@ samplGibs<-function(a0,b0,data)
       skewness_sample<-0
       kurtosis_sample<-0
       for(i in 1:m){
-        data_sample=get_Y_2(a,b)
+        data_sample=get_Y_2(a,b,N0)
         mean_sample<-mean_sample+mean(data_sample)
         sd_sample<-sd_sample+sd(data_sample)
         skewness_sample<-skewness_sample+skewness(data_sample)
@@ -227,12 +238,92 @@ samplGibs<-function(a0,b0,data)
   ans<-c(ans,b_ans)
 }
 
-get_Y_2<-function(a,b)
+nsamplGibs_N0<-function(n, data,a,b){
+  library(e1071) 
+  mean_data<-mean(data)
+  std_data<-sd(data)  
+  skewness_data<-skewness(data)
+  kurtosis_data<-kurtosis(data)
+  N0_min=0
+  N0_max=2
+  N0_ans=0
+  best_r=1000
+  
+  for(i in 1:n){
+    N0_0=runif(1,min=N0_min, max=N0_max)
+    N0<-samplGibs_N0(N0_0,data,a,b)
+    data_sample=get_Y_2(a,b,N0)
+    mean_sample<-mean(data_sample)    
+    sd_sample<-sd(data_sample)
+    skewness_sample<-skewness(data_sample)
+    kurtosis_sample<-kurtosis(data_sample)
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+    if(r<=best_r)
+    {
+      best_r <- r
+      N0_ans=N0
+    }
+  }
+  ans<-N0
+}
+
+samplGibs_N0<-function(N0_0,data,a,b)
+{
+  n=100
+  m=100
+  mean_data<-mean(data)
+  std_data<-sd(data)
+  skewness_data<-skewness(data)
+  kurtosis_data<-kurtosis(data)
+  best_r=1000
+  r = 1000
+  N0_min=0
+  N0_max=20
+  N0_ans=0
+  N0=N0_0
+  for(j in 1:n){
+    print(best_r)
+    print(j)
+    prev_N0 = N0
+    N0=runif(1,min=N0_min, max=N0_max)
+    mean_sample<-0
+    sd_sample<-0
+    skewness_sample<-0
+    kurtosis_sample<-0
+    for(i in 1:m){
+      data_sample=get_Y_2(a,b,N0)
+      mean_sample<-mean_sample+mean(data_sample)
+      sd_sample<-sd_sample+sd(data_sample)
+      skewness_sample<-skewness_sample+skewness(data_sample)
+      kurtosis_sample<-kurtosis_sample+kurtosis(data_sample)
+    }
+    mean_sample<-mean_sample/m
+    sd_sample<-sd_sample/m
+    skewness_sample<-skewness_sample/m      
+    kurtosis_sample<-kurtosis_sample/m
+    r_pr<-r
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+as.numeric(quantile(data_sample,0.025))+as.numeric(quantile(data_sample,0.975))
+    if(r<=best_r)
+    {
+      best_r <- r
+      N0_ans=N0
+    }
+    k=r_pr/(r+r_pr)
+    t<-runif(1,0,1)
+    if(t<=k)
+    {
+      N0 = prev_N0
+    }
+  }
+  ans<-N0
+}
+
+get_Y_2<-function(a,b,N0)
 {
   #jpeg('rplot.jpg')
   #p<-0.95
   lst1 <- c()
-  y0<-1
+  y0<-N0
   for (i in 1:100)
   {
     scale <- rnorm(1, 0, 0.65) + 2
