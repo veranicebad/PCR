@@ -113,7 +113,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,150))
+  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,50))
   run_20_ab<-c()
   run_19_ab<-c()
   run_18_ab<-c()
@@ -165,7 +165,7 @@ nsamplGibs_a_b<-function(n, data,N0){
   a_min=0
   b_min=0
   a_max=2
-  b_max=150
+  b_max=50
   a_ans=0
   b_ans=0
   best_r=1000
@@ -208,7 +208,7 @@ samplGibs_a_b<-function(a0,b0,data,N0)
   a_min=0
   b_min=0
   a_max=2
-  b_max=150
+  b_max=50
   a_ans=0
   b_ans=0
   a=a0
@@ -376,7 +376,7 @@ get_N0<-function(a,b,N)
   return(N0)
 }
 
-get_N0_for_deletion(){
+get_N0_for_deletion<-function(){
   get_deletions_from_real_data()
 }
 
