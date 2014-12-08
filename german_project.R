@@ -413,7 +413,7 @@ get_N0_for_deletion<-function(){
   for(j in 1:100){
     N0_run_20_pat_016_AMPL1316862546<-c(N0_run_20_pat_016_AMPL1316862546,
                                         get_N0(ab_run_20_AMPL1316862546[1],
-                                               ab_run_20_AMPL1316862546[b],
+                                               ab_run_20_AMPL1316862546[2],
                                                N_run_20_pat_016_AMPL1316862546))
   }
   plot(density(N0_run_20_pat_016_AMPL1316862546))
