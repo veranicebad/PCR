@@ -113,7 +113,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,20),ylim=c(0,50))
+  plot(0,0,col='white',xlim=c(0,2.5),ylim=c(0,150))
   run_20_ab<-c()
   run_19_ab<-c()
   run_18_ab<-c()
@@ -138,11 +138,11 @@ plot_parAB_real_data<-function(){
     ab_amp_i_run_20<-nsamplGibs_a_b(1, amp_i_run_20,1)
     run_20_ab<-c(run_20_ab, ab_amp_i_run_20)
     run_19_ab<-c(run_19_ab, ab_amp_i_run_19)
-    run_18_ab<-c(run_18_ab, ab_amp_i_run_19)
-    run_17_ab<-c(run_17_ab, ab_amp_i_run_19)
-    run_16_ab<-c(run_16_ab, ab_amp_i_run_19)
-    run_15_ab<-c(run_15_ab, ab_amp_i_run_19)
-    run_14_ab<-c(run_14_ab, ab_amp_i_run_19)
+    run_18_ab<-c(run_18_ab, ab_amp_i_run_18)
+    run_17_ab<-c(run_17_ab, ab_amp_i_run_17)
+    run_16_ab<-c(run_16_ab, ab_amp_i_run_16)
+    run_15_ab<-c(run_15_ab, ab_amp_i_run_15)
+    run_14_ab<-c(run_14_ab, ab_amp_i_run_14)
     points(ab_amp_i_run_14[1],ab_amp_i_run_14[2], pch=16, col="red")
     points(ab_amp_i_run_15[1],ab_amp_i_run_15[2], pch=16, col="orange")
     points(ab_amp_i_run_16[1],ab_amp_i_run_16[2], pch=16, col="yellow")
@@ -164,8 +164,8 @@ nsamplGibs_a_b<-function(n, data,N0){
   kurtosis_data<-kurtosis(data)
   a_min=0
   b_min=0
-  a_max=20
-  b_max=50
+  a_max=2.5
+  b_max=150
   a_ans=0
   b_ans=0
   best_r=1000
@@ -207,8 +207,8 @@ samplGibs_a_b<-function(a0,b0,data,N0)
   r = 1000
   a_min=0
   b_min=0
-  a_max=20
-  b_max=50
+  a_max=2.5
+  b_max=150
   a_ans=0
   b_ans=0
   a=a0
@@ -376,8 +376,27 @@ get_N0<-function(a,b,N)
   return(N0)
 }
 
-get_N0_for_deletion<-function(){
-  get_deletions_from_real_data()
+get_N0_for_deletion<-function(all_ab){
+  #jpeg('rplot.jpg')
+  ab = matrix(nrow=6, ncol=10)
+  for
+  deletion_data<-get_deletions_from_real_data()
+  #deletion_data[, grep("IonXpress_17_013", colnames(mydata))]
+  N0_i_j<-c()
+  #ab<-c(all_ab[4,13],all_ab[4,21],all_ab[4,45], all_ab[3,42],
+  #      all_ab[3,44],all_ab[3,46], all_ab[3,1], all_ab[2,37], 
+  #      all_ab[1,12],all_ab[1,16])
+  for(i in 1:ncol(deletion_data)){
+    N0_i<-c()
+    a<-ab[1,i]
+    b<-ab[2,i]
+    for(j in 1:100){
+      N0_i<-c(N0_i,get_N0(a,b,deletion_data[,i]))
+    }
+    N0_i_j<-c(N0_i_j, N0_i)
+  }
+  return(N0_i_j)
+  #dev.off()
 }
 
 get_Y_2<-function(a,b,N0)
