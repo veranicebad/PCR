@@ -377,7 +377,8 @@ get_N0<-function(a,b,N)
 }
 
 get_N0_for_deletion<-function(){
-  mydata<-remove_deletions_from_real_data()
+  mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)                              
+  mydata<-normalization(mydata)
   run_20_pat_016<-mydata[, grep("IonXpress_20_016", colnames(mydata))]
   #run_20_pat_012<-mydata[, grep("IonXpress_20_012", colnames(mydata))]
   #run_19_pat_037<-mydata[, grep("IonXpress_19_037", colnames(mydata))]
