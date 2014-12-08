@@ -24,7 +24,7 @@ panel.lmpolyline <- function(x, y, groups = NULL,
 }
 
 
-xyplot(y ~ x, data = d) + layer_(panel.lmpolyline(...,col.line = 134, degree = 20))
+#xyplot(y ~ x, data = d) + layer_(panel.lmpolyline(...,col.line = 134, degree = 20))
 
 
 
@@ -71,7 +71,7 @@ plot_reaSl_data<-function()
 
 remove_deletions_from_real_data<-function(){
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
-  normalization(mydata)
+  mydata<-normalization(mydata)
   mydata$IonXpress_17_013<-NULL
   mydata$IonXpress_17_021<-NULL
   mydata$IonXpress_17_045<-NULL
@@ -87,7 +87,7 @@ remove_deletions_from_real_data<-function(){
 
 get_deletions_from_real_data<-function(){
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)
-  normalization(mydata)
+  mydata<-normalization(mydata)
   data_without_del<-remove_deletions_from_real_data()
   data <- mydata
   data<-data[,-which(names(data) %in% names(data_without_del))]
@@ -113,7 +113,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,2),ylim=c(0,50))
+  plot(0,0,col='white',xlim=c(0,20),ylim=c(0,50))
   run_20_ab<-c()
   run_19_ab<-c()
   run_18_ab<-c()
@@ -164,7 +164,7 @@ nsamplGibs_a_b<-function(n, data,N0){
   kurtosis_data<-kurtosis(data)
   a_min=0
   b_min=0
-  a_max=2
+  a_max=20
   b_max=50
   a_ans=0
   b_ans=0
@@ -207,7 +207,7 @@ samplGibs_a_b<-function(a0,b0,data,N0)
   r = 1000
   a_min=0
   b_min=0
-  a_max=2
+  a_max=20
   b_max=50
   a_ans=0
   b_ans=0
