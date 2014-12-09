@@ -98,7 +98,7 @@ normalization<-function(data){
   cs<-colSums(data[,3:ncol(data)])
   newdata <-data[,3:ncol(data)]
   for(i in 1:ncol(newdata)){
-      newdata[,i]<-newdata[,i]*100/cs[i]
+    newdata[,i]<-as.integer(newdata[,i]*100000/cs[i])
   }
   data[,3:ncol(data)] <- newdata
   return(data)
@@ -113,7 +113,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(0,2.5),ylim=c(0,150))
+  plot(0,0,col='white',xlim=c(7,10),ylim=c(1.5,2))
   run_20_ab<-c()
   run_19_ab<-c()
   run_18_ab<-c()
@@ -162,14 +162,14 @@ nsamplGibs_a_b<-function(n, data,N0){
   std_data<-sd(data)  
   skewness_data<-skewness(data)
   kurtosis_data<-kurtosis(data)
-  a_min=0
-  b_min=0
-  a_max=2.5
-  b_max=150
+  a_min=7
+  b_min=1.5
+  a_max=10
+  b_max=2
   a_ans=0
   b_ans=0
   best_r=1000
-  
+  r=1000
   for(i in 1:n){
     a0=runif(1,min=a_min, max=a_max)
     b0=runif(1,min=b_min, max=b_max)
@@ -205,63 +205,67 @@ samplGibs_a_b<-function(a0,b0,data,N0)
   kurtosis_data<-kurtosis(data)
   best_r=1000
   r = 1000
-  a_min=0
-  b_min=0
-  a_max=2.5
-  b_max=150
+  a_min=7
+  b_min=1.5
+  a_max=10
+  b_max=2
   a_ans=0
   b_ans=0
   a=a0
   b=b0
-    for(j in 1:n){
-      print(best_r)
-      print(j)
+  for(j in 1:n){
+    print(best_r)
+    print(j)
+    if(j%%2==0){
+      prev_a = a
+      a=runif(1,min=a_min, max=a_max)
+    }
+    else{
+      prev_b = b
+      b=runif(1,min=b_min, max=b_max)
+    }
+    mean_sample<-0
+    sd_sample<-0
+    skewness_sample<-0
+    kurtosis_sample<-0
+    for(i in 1:m){
+      data_sample=get_Y_2(a,b,N0)
+      mean_sample<-mean_sample+mean(data_sample)
+      sd_sample<-sd_sample+sd(data_sample)
+      skewness_sample<-skewness_sample+skewness(data_sample)
+      kurtosis_sample<-kurtosis_sample+kurtosis(data_sample)
+    }
+    mean_sample<-mean_sample/m
+    sd_sample<-sd_sample/m
+    skewness_sample<-skewness_sample/m      
+    kurtosis_sample<-kurtosis_sample/m
+    r_pr<-r
+    r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+
+      abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+
+      abs(as.numeric(quantile(data_sample,0.025))-as.numeric(quantile(data,0.025)))
+    +abs(as.numeric(quantile(data_sample,0.975))-as.numeric(quantile(data,0.975)))
+    #print(r)
+    #print(a)
+    #print(b)
+    
+    if(r<=best_r)
+    {
+      best_r <- r
+      a_ans=a
+      b_ans=b
+    }
+    k=r_pr/(r+r_pr)
+    t<-runif(1,0,1)
+    if(t<=k)
+    {
       if(j%%2==0){
-        prev_a = a
-        a=runif(1,min=a_min, max=a_max)
+        a = prev_a
       }
-      else{
-        prev_b = b
-        b=runif(1,min=b_min, max=b_max)
-      }
-      mean_sample<-0
-      sd_sample<-0
-      skewness_sample<-0
-      kurtosis_sample<-0
-      for(i in 1:m){
-        data_sample=get_Y_2(a,b,N0)
-        mean_sample<-mean_sample+mean(data_sample)
-        sd_sample<-sd_sample+sd(data_sample)
-        skewness_sample<-skewness_sample+skewness(data_sample)
-        kurtosis_sample<-kurtosis_sample+kurtosis(data_sample)
-      }
-      mean_sample<-mean_sample/m
-      sd_sample<-sd_sample/m
-      skewness_sample<-skewness_sample/m      
-      kurtosis_sample<-kurtosis_sample/m
-      r_pr<-r
-      r=abs(mean_data-mean_sample)+abs(std_data-sd_sample)+
-        abs(skewness_data-skewness_sample)+abs(kurtosis_data-kurtosis_sample)+
-        abs(as.numeric(quantile(data_sample,0.025))-as.numeric(quantile(data,0.025)))
-      +abs(as.numeric(quantile(data_sample,0.975))-as.numeric(quantile(data,0.975)))
-      if(r<=best_r)
+      else
       {
-        best_r <- r
-        a_ans=a
-        b_ans=b
+        b = prev_b
       }
-      k=r_pr/(r+r_pr)
-      t<-runif(1,0,1)
-      if(t<=k)
-      {
-        if(j%%2==0){
-          a = prev_a
-        }
-        else
-        {
-          b = prev_b
-        }
-      }
+    }
     
   }
   ans<-c()
@@ -359,11 +363,11 @@ samplGibs_N0<-function(N0_0,data,a,b)
 
 get_N0<-function(a,b,N)
 {
-  N0_min<-1
-  N0_max=100
-  rmin<-1000
+  N0_min<-0.5
+  N0_max=2.5
+  rmin<-100
   N0<-N0_min
-  for(i in N0_min:N0_max){
+  for(i in seq(N0_min,N0_max,0.01)){
     val<-get_Y_2(a,b,i)
     mean_val<-mean(val)
     r<-abs(N-mean_val)
@@ -379,36 +383,37 @@ get_N0<-function(a,b,N)
 get_N0_for_deletion<-function(){
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)                              
   mydata<-normalization(mydata)
-  run_20_pat_016<-mydata[, grep("IonXpress_20_016", colnames(mydata))]
-  #run_20_pat_012<-mydata[, grep("IonXpress_20_012", colnames(mydata))]
-  #run_19_pat_037<-mydata[, grep("IonXpress_19_037", colnames(mydata))]
-  #run_18_pat_001<-mydata[, grep("IonXpress_18_001", colnames(mydata))]
-  #run_18_pat_046<-mydata[, grep("IonXpress_18_046", colnames(mydata))]
-  #run_18_pat_044<-mydata[, grep("IonXpress_18_044", colnames(mydata))]
-  #run_18_pat_042<-mydata[, grep("IonXpress_18_042", colnames(mydata))]
-  #run_17_pat_045<-mydata[, grep("IonXpress_17_045", colnames(mydata))]
-  #run_17_pat_021<-mydata[, grep("IonXpress_17_021", colnames(mydata))]
-  #run_17_pat_013<-mydata[, grep("IonXpress_17_013", colnames(mydata))]
-  N_run_20_pat_016_AMPL1316862546 <- as.numeric(run_20_pat_016[grep("AMPL1316862546", row.names(mydata)),])
-  N_run_20_pat_016_AMPL655136916 <- as.numeric(run_20_pat_016[grep("AMPL655136916", row.names(mydata)),])
-  N_run_20_pat_016_AMPL478031510 <- as.numeric(run_20_pat_016[grep("AMPL478031510", row.names(mydata)),])
-  N_run_20_pat_016_AMPL468281303 <- as.numeric(run_20_pat_016[grep("AMPL468281303", row.names(mydata)),])
-  N_run_20_pat_016_AMPL612960426 <- as.numeric(run_20_pat_016[grep("AMPL612960426", row.names(mydata)),])
-  N_run_20_pat_016_AMPL612959905 <- as.numeric(run_20_pat_016[grep("AMPL612959905", row.names(mydata)),])
+  run_20_pat_016<-mydata[, c(2, grep("IonXpress_20_045", colnames(mydata)))]
+  #run_20_pat_012<-mydata[, c(2,grep("IonXpress_20_012", colnames(mydata)))]
+  #run_19_pat_037<-mydata[, c(2,grep("IonXpress_19_037", colnames(mydata)))]
+  #run_18_pat_001<-mydata[, c(2,grep("IonXpress_18_001", colnames(mydata)))]
+  #run_18_pat_046<-mydata[, c(2,grep("IonXpress_18_046", colnames(mydata)))]
+  #run_18_pat_044<-mydata[, c(2,grep("IonXpress_18_044", colnames(mydata)))]
+  #run_18_pat_042<-mydata[, c(2,grep("IonXpress_18_042", colnames(mydata)))]
+  #run_17_pat_045<-mydata[, c(2,grep("IonXpress_17_045", colnames(mydata)))]
+  #run_17_pat_021<-mydata[, c(2,grep("IonXpress_17_021", colnames(mydata)))]
+  #run_17_pat_013<-mydata[, c(2,grep("IonXpress_17_013", colnames(mydata)))]
+  N_run_20_pat_016_AMPL1316862546 <- as.numeric(run_20_pat_016[grep("AMPL1316862546", mydata$Target),2])
+  N_run_20_pat_016_AMPL655136916 <- as.numeric(run_20_pat_016[grep("AMPL655136916", mydata$Target),2])
+  N_run_20_pat_016_AMPL478031510 <- as.numeric(run_20_pat_016[grep("AMPL478031510", mydata$Target),2])
+  N_run_20_pat_016_AMPL468281303 <- as.numeric(run_20_pat_016[grep("AMPL468281303", mydata$Target),2])
+  N_run_20_pat_016_AMPL612960426 <- as.numeric(run_20_pat_016[grep("AMPL612960426", mydata$Target),2])
+  N_run_20_pat_016_AMPL612959905 <- as.numeric(run_20_pat_016[grep("AMPL612959905", mydata$Target),2])
   
+  mydata<-remove_deletions_from_real_data()
   run_20<-mydata[, grep("IonXpress_20", colnames(mydata))]
   
-  run_20_AMPL1316862546 <- as.numeric(run_20[grep("AMPL1316862546", row.names(mydata)),])
-  ab_run_20_AMPL1316862546<-nsamplGibs_a_b(1, run_20_AMPL1316862546,1)
-  #run_20_AMPL655136916 <- as.numeric(run_20[grep("AMPL655136916", row.names(mydata)),])
+  run_20_AMPL1316862546 <- as.numeric(run_20[grep("AMPL1316862546", mydata$Target),])
+  ab_run_20_AMPL1316862546<-nsamplGibs_a_b(1, run_20_AMPL1316862546,2)
+  #run_20_AMPL655136916 <- as.numeric(run_20[grep("AMPL655136916", mydata$Target),])
   #ab_run_20_AMPL655136916<-nsamplGibs_a_b(1, run_20_AMPL655136916,1) 
-  #run_20_AMPL478031510 <- as.numeric(run_20[grep("AMPL478031510", row.names(mydata)),])
+  #run_20_AMPL478031510 <- as.numeric(run_20[grep("AMPL478031510", mydata$Target),])
   #ab_run_20_AMPL478031510<-nsamplGibs_a_b(1, run_20_AMPL478031510,1)
-  #run_20_AMPL468281303 <- as.numeric(run_20[grep("AMPL468281303", row.names(mydata)),])
+  #run_20_AMPL468281303 <- as.numeric(run_20[grep("AMPL468281303", mydata$Target),])
   #ab_run_20_AMPL468281303<-nsamplGibs_a_b(1, run_20_AMPL468281303,1)
-  #run_20_AMPL612960426 <- as.numeric(run_20[grep("AMPL612960426", row.names(mydata)),])
+  #run_20_AMPL612960426 <- as.numeric(run_20[grep("AMPL612960426", mydata$Target),])
   #ab_run_20_AMPL612960426<-nsamplGibs_a_b(1, run_20_AMPL612960426,1)
-  #run_20_AMPL612959905 <- as.numeric(run_20[grep("AMPL612959905", row.names(mydata)),])
+  #run_20_AMPL612959905 <- as.numeric(run_20[grep("AMPL612959905", mydata$Target),])
   #ab_run_20_AMPL612959905<-nsamplGibs_a_b(1, run_20_AMPL612959905,1)
   N0_run_20_pat_016_AMPL1316862546<-c()
   for(j in 1:100){
@@ -418,7 +423,7 @@ get_N0_for_deletion<-function(){
                                                N_run_20_pat_016_AMPL1316862546))
   }
   plot(density(N0_run_20_pat_016_AMPL1316862546))
- }
+}
 
 
 get_Y_2<-function(a,b,N0)
@@ -429,11 +434,12 @@ get_Y_2<-function(a,b,N0)
   y0<-N0
   for (i in 1:50)
   {
-    scale <- rnorm(1, 0, 0.65) + 2
+    #scale <- rnorm(1, 0, 0.65) + 2
+    scale<-1+rnorm(1, 0, 0.05)
     y <- y0* scale #+ rnorm(1, 0, 0.005)
     for (j in 1:12)
     { 
-      p<-1/(1+exp((j-a)*b))
+      p<-1.0/(1+exp((j-a)*b))
       t<-runif(1,0,1)
       #print(t)
       if(t<=p)
@@ -447,7 +453,7 @@ get_Y_2<-function(a,b,N0)
       #print(eff)
       y <- y * eff
     }
-    lst1 <- c(lst1, y)
+    lst1 <- c(lst1, as.integer(y))
   }
   Y<-data.frame(y=lst1)
   sort_y<-Y[order(Y[1]),]
@@ -544,8 +550,8 @@ get_YZ_as_in_lect <- function(x, p1, p2)
       zn <- rnorm(1, 0, p2*(1-p2)*z/7000)#p2*(1-p2)*
       z <- (1+p2)*z+zn
     }
-      lst1 <- c(lst1, y)
-      lst2 <- c(lst2, z)
+    lst1 <- c(lst1, y)
+    lst2 <- c(lst2, z)
   }
   d<-density(lst1)
   #plot(d)
@@ -637,7 +643,7 @@ get_linear_model <- function(lst)
   lines(lst[[1]],fitted.values[],lwd=2, col="red")
   lines(lst[[1]],pred.lower[],lwd=2, col="blue")
   lines(lst[[1]],pred.upper[],lwd=2, col="blue")
-
+  
   dev.off()
   return(fit) 
 } 
