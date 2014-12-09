@@ -383,16 +383,16 @@ get_N0<-function(a,b,N)
 get_N0_for_deletion<-function(){
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)                              
   mydata<-normalization(mydata)
-  run_20_pat_016<-mydata[, c(2, grep("IonXpress_20_045", colnames(mydata)))]
-  #run_20_pat_012<-mydata[, c(2,grep("IonXpress_20_012", colnames(mydata)))]
-  #run_19_pat_037<-mydata[, c(2,grep("IonXpress_19_037", colnames(mydata)))]
-  #run_18_pat_001<-mydata[, c(2,grep("IonXpress_18_001", colnames(mydata)))]
-  #run_18_pat_046<-mydata[, c(2,grep("IonXpress_18_046", colnames(mydata)))]
-  #run_18_pat_044<-mydata[, c(2,grep("IonXpress_18_044", colnames(mydata)))]
-  #run_18_pat_042<-mydata[, c(2,grep("IonXpress_18_042", colnames(mydata)))]
-  #run_17_pat_045<-mydata[, c(2,grep("IonXpress_17_045", colnames(mydata)))]
-  #run_17_pat_021<-mydata[, c(2,grep("IonXpress_17_021", colnames(mydata)))]
-  #run_17_pat_013<-mydata[, c(2,grep("IonXpress_17_013", colnames(mydata)))]
+  run_20_pat_016<-mydata[, c(2, grep("IonXpress_20_016", colnames(mydata)))]
+  run_20_pat_012<-mydata[, c(2,grep("IonXpress_20_012", colnames(mydata)))]
+  run_19_pat_037<-mydata[, c(2,grep("IonXpress_19_037", colnames(mydata)))]
+  run_18_pat_001<-mydata[, c(2,grep("IonXpress_18_001", colnames(mydata)))]
+  run_18_pat_046<-mydata[, c(2,grep("IonXpress_18_046", colnames(mydata)))]
+  run_18_pat_044<-mydata[, c(2,grep("IonXpress_18_044", colnames(mydata)))]
+  run_18_pat_042<-mydata[, c(2,grep("IonXpress_18_042", colnames(mydata)))]
+  run_17_pat_045<-mydata[, c(2,grep("IonXpress_17_045", colnames(mydata)))]
+  run_17_pat_021<-mydata[, c(2,grep("IonXpress_17_021", colnames(mydata)))]
+  run_17_pat_013<-mydata[, c(2,grep("IonXpress_17_013", colnames(mydata)))]
   N_run_20_pat_016_AMPL1316862546 <- as.numeric(run_20_pat_016[grep("AMPL1316862546", mydata$Target),2])
   N_run_20_pat_016_AMPL655136916 <- as.numeric(run_20_pat_016[grep("AMPL655136916", mydata$Target),2])
   N_run_20_pat_016_AMPL478031510 <- as.numeric(run_20_pat_016[grep("AMPL478031510", mydata$Target),2])
@@ -405,22 +405,48 @@ get_N0_for_deletion<-function(){
   
   run_20_AMPL1316862546 <- as.numeric(run_20[grep("AMPL1316862546", mydata$Target),])
   ab_run_20_AMPL1316862546<-nsamplGibs_a_b(1, run_20_AMPL1316862546,2)
-  #run_20_AMPL655136916 <- as.numeric(run_20[grep("AMPL655136916", mydata$Target),])
-  #ab_run_20_AMPL655136916<-nsamplGibs_a_b(1, run_20_AMPL655136916,1) 
-  #run_20_AMPL478031510 <- as.numeric(run_20[grep("AMPL478031510", mydata$Target),])
-  #ab_run_20_AMPL478031510<-nsamplGibs_a_b(1, run_20_AMPL478031510,1)
-  #run_20_AMPL468281303 <- as.numeric(run_20[grep("AMPL468281303", mydata$Target),])
-  #ab_run_20_AMPL468281303<-nsamplGibs_a_b(1, run_20_AMPL468281303,1)
-  #run_20_AMPL612960426 <- as.numeric(run_20[grep("AMPL612960426", mydata$Target),])
-  #ab_run_20_AMPL612960426<-nsamplGibs_a_b(1, run_20_AMPL612960426,1)
-  #run_20_AMPL612959905 <- as.numeric(run_20[grep("AMPL612959905", mydata$Target),])
-  #ab_run_20_AMPL612959905<-nsamplGibs_a_b(1, run_20_AMPL612959905,1)
-  N0_run_20_pat_016_AMPL1316862546<-c()
+  run_20_AMPL655136916 <- as.numeric(run_20[grep("AMPL655136916", mydata$Target),])
+  ab_run_20_AMPL655136916<-nsamplGibs_a_b(1, run_20_AMPL655136916,1) 
+  run_20_AMPL478031510 <- as.numeric(run_20[grep("AMPL478031510", mydata$Target),])
+  ab_run_20_AMPL478031510<-nsamplGibs_a_b(1, run_20_AMPL478031510,1)
+  run_20_AMPL468281303 <- as.numeric(run_20[grep("AMPL468281303", mydata$Target),])
+  ab_run_20_AMPL468281303<-nsamplGibs_a_b(1, run_20_AMPL468281303,1)
+  run_20_AMPL612960426 <- as.numeric(run_20[grep("AMPL612960426", mydata$Target),])
+  ab_run_20_AMPL612960426<-nsamplGibs_a_b(1, run_20_AMPL612960426,1)
+  run_20_AMPL612959905 <- as.numeric(run_20[grep("AMPL612959905", mydata$Target),])
+  ab_run_20_AMPL612959905<-nsamplGibs_a_b(1, run_20_AMPL612959905,1)
+  N0_run_20_pat_016_AMPL1316862546 <- c()
+  N0_run_20_pat_016_AMPL655136916 <- c()
+  N0_run_20_pat_016_AMPL478031510 <- c()
+  N0_run_20_pat_016_AMPL468281303 <- c()
+  N0_run_20_pat_016_AMPL612960426 <- c()
+  N0_run_20_pat_016_AMPL612959905 <- c()
+    
   for(j in 1:100){
     N0_run_20_pat_016_AMPL1316862546<-c(N0_run_20_pat_016_AMPL1316862546,
                                         get_N0(ab_run_20_AMPL1316862546[1],
                                                ab_run_20_AMPL1316862546[2],
                                                N_run_20_pat_016_AMPL1316862546))
+    N0_run_20_pat_016_AMPL655136916<-c(N0_run_20_pat_016_AMPL655136916,
+                                        get_N0(ab_run_20_AMPL655136916[1],
+                                               ab_run_20_AMPL655136916[2],
+                                               N_run_20_pat_016_AMPL655136916))
+    N0_run_20_pat_016_AMPL478031510<-c(N0_run_20_pat_016_AMPL478031510,
+                                       get_N0(ab_run_20_AMPL478031510[1],
+                                              ab_run_20_AMPL478031510[2],
+                                              N_run_20_pat_016_AMPL478031510))
+    N0_run_20_pat_016_AMPL468281303<-c(N0_run_20_pat_016_AMPL468281303,
+                                       get_N0(ab_run_20_AMPL468281303[1],
+                                              ab_run_20_AMPL468281303[2],
+                                              N_run_20_pat_016_AMPL468281303))
+    N0_run_20_pat_016_AMPL612960426<-c(N0_run_20_pat_016_AMPL612960426,
+                                       get_N0(ab_run_20_AMPL612960426[1],
+                                              ab_run_20_AMPL612960426[2],
+                                              N_run_20_pat_016_AMPL612960426))
+    N0_run_20_pat_016_AMPL612959905<-c(N0_run_20_pat_016_AMPL612959905,
+                                       get_N0(ab_run_20_AMPL612959905[1],
+                                              ab_run_20_AMPL612959905[2],
+                                              N_run_20_pat_016_AMPL612959905))
   }
   plot(density(N0_run_20_pat_016_AMPL1316862546))
 }
