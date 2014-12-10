@@ -383,6 +383,8 @@ get_N0<-function(a,b,N)
 get_N0_for_deletion<-function(){
   mydata <- read.table("c:/Users/Vera/Documents/научка/Run_22_hg19_v3.bcmatrix.xls", header=TRUE)                              
   mydata<-normalization(mydata)
+  run_20_pat_045<-mydata[, c(2, grep("IonXpress_20_045", colnames(mydata)))]
+  
   run_20_pat_016<-mydata[, c(2, grep("IonXpress_20_016", colnames(mydata)))]
   run_20_pat_012<-mydata[, c(2,grep("IonXpress_20_012", colnames(mydata)))]
   run_19_pat_037<-mydata[, c(2,grep("IonXpress_19_037", colnames(mydata)))]
@@ -393,6 +395,9 @@ get_N0_for_deletion<-function(){
   run_17_pat_045<-mydata[, c(2,grep("IonXpress_17_045", colnames(mydata)))]
   run_17_pat_021<-mydata[, c(2,grep("IonXpress_17_021", colnames(mydata)))]
   run_17_pat_013<-mydata[, c(2,grep("IonXpress_17_013", colnames(mydata)))]
+  
+  N_run_20_pat_045_AMPL1316862546 <- as.numeric(run_20_pat_045[grep("AMPL1316862546", mydata$Target),2])
+  
   N_run_20_pat_016_AMPL1316862546 <- as.numeric(run_20_pat_016[grep("AMPL1316862546", mydata$Target),2])
   N_run_20_pat_016_AMPL655136916 <- as.numeric(run_20_pat_016[grep("AMPL655136916", mydata$Target),2])
   N_run_20_pat_016_AMPL478031510 <- as.numeric(run_20_pat_016[grep("AMPL478031510", mydata$Target),2])
@@ -415,6 +420,9 @@ get_N0_for_deletion<-function(){
   ab_run_20_AMPL612960426<-nsamplGibs_a_b(1, run_20_AMPL612960426,1)
   run_20_AMPL612959905 <- as.numeric(run_20[grep("AMPL612959905", mydata$Target),])
   ab_run_20_AMPL612959905<-nsamplGibs_a_b(1, run_20_AMPL612959905,1)
+  
+  N0_run_20_pat_045_AMPL1316862546 <- c()
+  
   N0_run_20_pat_016_AMPL1316862546 <- c()
   N0_run_20_pat_016_AMPL655136916 <- c()
   N0_run_20_pat_016_AMPL478031510 <- c()
@@ -423,6 +431,11 @@ get_N0_for_deletion<-function(){
   N0_run_20_pat_016_AMPL612959905 <- c()
     
   for(j in 1:100){
+    N0_run_20_pat_045_AMPL1316862546<-c(N0_run_20_pat_045_AMPL1316862546,
+                                        get_N0(ab_run_20_AMPL1316862546[1],
+                                               ab_run_20_AMPL1316862546[2],
+                                               N_run_20_pat_045_AMPL1316862546))
+    
     N0_run_20_pat_016_AMPL1316862546<-c(N0_run_20_pat_016_AMPL1316862546,
                                         get_N0(ab_run_20_AMPL1316862546[1],
                                                ab_run_20_AMPL1316862546[2],
