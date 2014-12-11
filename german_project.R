@@ -391,12 +391,17 @@ get_N0_for_deletion<-function(){
   
   
   run_20_pat_016<-mydata[, c(2, grep("IonXpress_20_016", colnames(mydata)))]
+  
   run_20_pat_012<-mydata[, c(2,grep("IonXpress_20_012", colnames(mydata)))]
   run_19_pat_037<-mydata[, c(2,grep("IonXpress_19_037", colnames(mydata)))]
+  
+  run_18_pat_027<-mydata[, c(2,grep("IonXpress_18_027", colnames(mydata)))]
+    
   run_18_pat_001<-mydata[, c(2,grep("IonXpress_18_001", colnames(mydata)))]
   run_18_pat_046<-mydata[, c(2,grep("IonXpress_18_046", colnames(mydata)))]
   run_18_pat_044<-mydata[, c(2,grep("IonXpress_18_044", colnames(mydata)))]
   run_18_pat_042<-mydata[, c(2,grep("IonXpress_18_042", colnames(mydata)))]
+  
   run_17_pat_045<-mydata[, c(2,grep("IonXpress_17_045", colnames(mydata)))]
   run_17_pat_021<-mydata[, c(2,grep("IonXpress_17_021", colnames(mydata)))]
   run_17_pat_013<-mydata[, c(2,grep("IonXpress_17_013", colnames(mydata)))]
@@ -404,6 +409,13 @@ get_N0_for_deletion<-function(){
   N_run_20_pat_043_AMPL1316862546 <- as.numeric(run_20_pat_043[grep("AMPL1316862546", mydata$Target),2])
   N_run_20_pat_044_AMPL1316862546 <- as.numeric(run_20_pat_044[grep("AMPL1316862546", mydata$Target),2])
   N_run_20_pat_045_AMPL1316862546 <- as.numeric(run_20_pat_045[grep("AMPL1316862546", mydata$Target),2])
+  
+  N_run_18_pat_027_AMPL478031510<-as.numeric(run_18_pat_027[grep("AMPL478031510", mydata$Target),2])
+  
+  N_run_18_pat_001_AMPL478031510<-as.numeric(run_18_pat_001[grep("AMPL478031510", mydata$Target),2])
+  N_run_18_pat_046_AMPL478031510<-as.numeric(run_18_pat_046[grep("AMPL478031510", mydata$Target),2])
+  N_run_18_pat_044_AMPL478031510<-as.numeric(run_18_pat_044[grep("AMPL478031510", mydata$Target),2])
+  N_run_18_pat_042_AMPL478031510<-as.numeric(run_18_pat_042[grep("AMPL478031510", mydata$Target),2])
   
   
   N_run_20_pat_016_AMPL1316862546 <- as.numeric(run_20_pat_016[grep("AMPL1316862546", mydata$Target),2])
@@ -429,11 +441,25 @@ get_N0_for_deletion<-function(){
   run_20_AMPL612959905 <- as.numeric(run_20[grep("AMPL612959905", mydata$Target),])
   ab_run_20_AMPL612959905<-nsamplGibs_a_b(1, run_20_AMPL612959905,1)
   
+  run_18<-mydata[, grep("IonXpress_18", colnames(mydata))] 
+  run_18_AMPL478031510 <- as.numeric(run_18[grep("AMPL478031510", mydata$Target),])
+  ab_run_18_AMPL478031510<-nsamplGibs_a_b(1, run_18_AMPL478031510,1)
+  
+  
   N0_run_20_pat_043_AMPL1316862546 <- c()
   N0_run_20_pat_044_AMPL1316862546 <- c()
   N0_run_20_pat_045_AMPL1316862546 <- c()
   
   N0_run_20_pat_016_AMPL1316862546 <- c()
+  
+  N0_run_18_pat_027_AMPL478031510 <- c()
+  
+  N0_run_18_pat_001_AMPL478031510 <- c()
+  N0_run_18_pat_042_AMPL478031510 <- c()
+  N0_run_18_pat_044_AMPL478031510 <- c()
+  N0_run_18_pat_046_AMPL478031510 <- c()
+  
+  
   N0_run_20_pat_016_AMPL655136916 <- c()
   N0_run_20_pat_016_AMPL478031510 <- c()
   N0_run_20_pat_016_AMPL468281303 <- c()
@@ -459,6 +485,8 @@ get_N0_for_deletion<-function(){
                                         get_N0(ab_run_20_AMPL1316862546[1],
                                                ab_run_20_AMPL1316862546[2],
                                                N_run_20_pat_016_AMPL1316862546))
+    
+    
     N0_run_20_pat_016_AMPL655136916<-c(N0_run_20_pat_016_AMPL655136916,
                                         get_N0(ab_run_20_AMPL655136916[1],
                                                ab_run_20_AMPL655136916[2],
@@ -479,9 +507,33 @@ get_N0_for_deletion<-function(){
                                        get_N0(ab_run_20_AMPL612959905[1],
                                               ab_run_20_AMPL612959905[2],
                                               N_run_20_pat_016_AMPL612959905))
+    
+    N0_run_18_pat_027_AMPL478031510<-c(N0_run_18_pat_027_AMPL478031510,
+                                       get_N0(ab_run_18_AMPL478031510[1],
+                                              ab_run_18_AMPL478031510[2],
+                                              N_run_18_pat_027_AMPL478031510))
+    
+    N0_run_18_pat_001_AMPL478031510<-c(N0_run_18_pat_001_AMPL478031510,
+                                        get_N0(ab_run_18_AMPL478031510[1],
+                                               ab_run_18_AMPL478031510[2],
+                                               N_run_18_pat_001_AMPL478031510))
+    N0_run_18_pat_042_AMPL478031510<-c(N0_run_18_pat_042_AMPL478031510,
+                                       get_N0(ab_run_18_AMPL478031510[1],
+                                              ab_run_18_AMPL478031510[2],
+                                              N_run_18_pat_042_AMPL478031510))
+    N0_run_18_pat_044_AMPL478031510<-c(N0_run_18_pat_044_AMPL478031510,
+                                       get_N0(ab_run_18_AMPL478031510[1],
+                                              ab_run_18_AMPL478031510[2],
+                                              N_run_18_pat_044_AMPL478031510))
+    
+    N0_run_18_pat_046_AMPL478031510<-c(N0_run_18_pat_046_AMPL478031510,
+                                       get_N0(ab_run_18_AMPL478031510[1],
+                                              ab_run_18_AMPL478031510[2],
+                                              N_run_18_pat_046_AMPL478031510))
+    
+    
   }
 totaldf_run_20_AMP1316862546 <- data.frame(X= numeric(0), ind= integer(0))
-#colnames(totaldf_run_20_AMP1316862546) <- c("X", "ind")
 totaldf_run_20_AMP1316862546 <- appenddf(totaldf_run_20_AMP1316862546, N0_run_20_pat_016_AMPL1316862546, 1)
 totaldf_run_20_AMP1316862546 <- appenddf(totaldf_run_20_AMP1316862546, N0_run_20_pat_043_AMPL1316862546, 2)
 totaldf_run_20_AMP1316862546 <- appenddf(totaldf_run_20_AMP1316862546, N0_run_20_pat_044_AMPL1316862546, 3)
@@ -491,7 +543,7 @@ totaldf_run_20_AMP1316862546$ind <- as.factor(totaldf_run_20_AMP1316862546$ind)
 levels(totaldf_run_20_AMP1316862546$ind) <- c("N0_run_20_pat_016_AMPL1316862546",
                                               "N0_run_20_pat_043_AMPL1316862546",
                                               "N0_run_20_pat_044_AMPL1316862546",
-                                              "N0_run_20_pat_045_AMPL612959905")
+                                              "N0_run_20_pat_045_AMPL1316862546")
 p <- ggplot(aes(x = X, fill = ind), data = totaldf_run_20_AMP1316862546) + geom_density(alpha =0.25, colour = "#4C0099", size = 1)+ scale_fill_manual(values = c( "#FB0000", "#41E228", "#41F128", "#41D328")) + coord_cartesian(xlim = c(0, 3)) + xlab("N0")
 N01.dens <- density(N0_run_20_pat_016_AMPL1316862546)
 df1.dens <- data.frame(x = N01.dens$x, y = N01.dens$y)
@@ -500,7 +552,35 @@ N02.dens <- density(c(N0_run_20_pat_043_AMPL1316862546, N0_run_20_pat_044_AMPL13
 df2.dens <- data.frame(x = N02.dens$x, y = N02.dens$y)
 
 p + geom_area(data = subset(df1.dens, x >= quantile(N0_run_20_pat_016_AMPL1316862546, 0.025) & x <= quantile(N0_run_20_pat_016_AMPL1316862546, 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25) + 
-  geom_area(data = subset(df2.dens, x >= quantile(N0_run_20_pat_043_AMPL1316862546, 0.025) & x <= quantile(c(N0_run_20_pat_043_AMPL1316862546, N0_run_20_pat_044_AMPL1316862546, N0_run_20_pat_045_AMPL1316862546), 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25)
+  geom_area(data = subset(df2.dens, x >= quantile(c(N0_run_20_pat_043_AMPL1316862546, N0_run_20_pat_044_AMPL1316862546, N0_run_20_pat_045_AMPL1316862546), 0.025) & x <= quantile(c(N0_run_20_pat_043_AMPL1316862546, N0_run_20_pat_044_AMPL1316862546, N0_run_20_pat_045_AMPL1316862546), 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25)
+
+
+#
+totaldf_run_18_AMPL478031510 <- data.frame(X= numeric(0), ind= integer(0))
+totaldf_run_18_AMPL478031510 <- appenddf(totaldf_run_18_AMPL478031510, N0_run_18_pat_027_AMPL478031510, 1)
+
+totaldf_run_18_AMPL478031510 <- appenddf(totaldf_run_18_AMPL478031510, N0_run_18_pat_001_AMPL478031510, 2)
+totaldf_run_18_AMPL478031510 <- appenddf(totaldf_run_18_AMPL478031510, N0_run_18_pat_042_AMPL478031510, 3)
+totaldf_run_18_AMPL478031510 <- appenddf(totaldf_run_18_AMPL478031510, N0_run_18_pat_044_AMPL478031510, 4)
+totaldf_run_18_AMPL478031510 <- appenddf(totaldf_run_18_AMPL478031510, N0_run_18_pat_046_AMPL478031510, 5)
+
+totaldf_run_18_AMPL478031510$ind <- as.factor(totaldf_run_18_AMPL478031510$ind)
+levels(totaldf_run_18_AMPL478031510$ind) <- c("N0_run_18_pat_027_AMPL478031510",
+                                              "N0_run_18_pat_001_AMPL478031510",
+                                              "N0_run_18_pat_042_AMPL478031510",
+                                              "N0_run_18_pat_044_AMPL478031510",
+                                              "N0_run_18_pat_046_AMPL478031510")
+p <- ggplot(aes(x = X, fill = ind), data = totaldf_run_18_AMPL478031510) + geom_density(alpha =0.25, colour = "#4C0099", size = 1)+ scale_fill_manual(values = c( "#41E228", "#FF0000", "#FB0000", "#FF3333", "#FF6666")) + coord_cartesian(xlim = c(0, 3)) + xlab("N0")
+N01.dens <- density(N0_run_18_pat_027_AMPL478031510)
+df1.dens <- data.frame(x = N01.dens$x, y = N01.dens$y)
+
+N02.dens <- density(c(N0_run_18_pat_001_AMPL478031510, N0_run_18_pat_042_AMPL478031510, N0_run_18_pat_044_AMPL478031510, N0_run_18_pat_046_AMPL478031510))
+df2.dens <- data.frame(x = N02.dens$x, y = N02.dens$y)
+
+p + geom_area(data = subset(df1.dens, x >= quantile(N0_run_18_pat_027_AMPL478031510, 0.025) & x <= quantile(N0_run_18_pat_027_AMPL478031510, 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25) + 
+  geom_area(data = subset(df2.dens, x >= quantile(c(N0_run_18_pat_001_AMPL478031510,N0_run_18_pat_042_AMPL478031510, N0_run_18_pat_044_AMPL478031510, N0_run_18_pat_046_AMPL478031510), 0.025) & x <= quantile(c(N0_run_18_pat_001_AMPL478031510,N0_run_18_pat_042_AMPL478031510, N0_run_18_pat_044_AMPL478031510, N0_run_18_pat_046_AMPL478031510), 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25)
+#
+
 #totaldf <- data.frame(0,2)
 #colnames(totaldf_run_20_AMP1316862546) <- c("X", "ind")
 
