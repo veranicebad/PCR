@@ -113,7 +113,7 @@ plot_parAB_real_data<-function(){
   run_16<-mydata[, grep("IonXpress_16", colnames(mydata))]
   run_15<-mydata[, grep("IonXpress_15", colnames(mydata))]
   run_14<-mydata[, grep("IonXpress_14", colnames(mydata))]
-  plot(0,0,col='white',xlim=c(7,10),ylim=c(1.5,2))
+  plot(0,0,col='white',xlim=c(7,10),ylim=c(1.5,2),xlab="a", ylab="b")
   run_20_ab<-c()
   run_19_ab<-c()
   run_18_ab<-c()
