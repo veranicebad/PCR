@@ -129,13 +129,13 @@ plot_parAB_real_data<-function(){
     amp_i_run_18 <- as.numeric(run_18[i,])
     amp_i_run_19 <- as.numeric(run_19[i,])
     amp_i_run_20 <- as.numeric(run_20[i,])
-    ab_amp_i_run_14<-nsamplGibs_a_b(1, amp_i_run_14,1)
-    ab_amp_i_run_15<-nsamplGibs_a_b(1, amp_i_run_15,1)
-    ab_amp_i_run_16<-nsamplGibs_a_b(1, amp_i_run_16,1)
-    ab_amp_i_run_17<-nsamplGibs_a_b(1, amp_i_run_17,1)
-    ab_amp_i_run_18<-nsamplGibs_a_b(1, amp_i_run_18,1)
-    ab_amp_i_run_19<-nsamplGibs_a_b(1, amp_i_run_19,1)
-    ab_amp_i_run_20<-nsamplGibs_a_b(1, amp_i_run_20,1)
+    ab_amp_i_run_14<-nsamplGibs_a_b(1, amp_i_run_14,2)
+    ab_amp_i_run_15<-nsamplGibs_a_b(1, amp_i_run_15,2)
+    ab_amp_i_run_16<-nsamplGibs_a_b(1, amp_i_run_16,2)
+    ab_amp_i_run_17<-nsamplGibs_a_b(1, amp_i_run_17,2)
+    ab_amp_i_run_18<-nsamplGibs_a_b(1, amp_i_run_18,2)
+    ab_amp_i_run_19<-nsamplGibs_a_b(1, amp_i_run_19,2)
+    ab_amp_i_run_20<-nsamplGibs_a_b(1, amp_i_run_20,2)
     run_20_ab<-c(run_20_ab, ab_amp_i_run_20)
     run_19_ab<-c(run_19_ab, ab_amp_i_run_19)
     run_18_ab<-c(run_18_ab, ab_amp_i_run_18)
@@ -443,7 +443,7 @@ get_N0_for_deletion<-function(){
   
   run_18<-mydata[, grep("IonXpress_18", colnames(mydata))] 
   run_18_AMPL478031510 <- as.numeric(run_18[grep("AMPL478031510", mydata$Target),])
-  ab_run_18_AMPL478031510<-nsamplGibs_a_b(1, run_18_AMPL478031510,1)
+  ab_run_18_AMPL478031510<-nsamplGibs_a_b(1, run_18_AMPL478031510,2)
   
   
   N0_run_20_pat_043_AMPL1316862546 <- c()
@@ -570,7 +570,7 @@ levels(totaldf_run_18_AMPL478031510$ind) <- c("N0_run_18_pat_027_AMPL478031510",
                                               "N0_run_18_pat_042_AMPL478031510",
                                               "N0_run_18_pat_044_AMPL478031510",
                                               "N0_run_18_pat_046_AMPL478031510")
-p <- ggplot(aes(x = X, fill = ind), data = totaldf_run_18_AMPL478031510) + geom_density(alpha =0.25, colour = "#4C0099", size = 1)+ scale_fill_manual(values = c( "#41E228", "#FF0000", "#FB0000", "#FF3333", "#FF6666")) + coord_cartesian(xlim = c(0, 3)) + xlab("N0")
+p <- ggplot(aes(x = X, fill = ind), data = totaldf_run_18_AMPL478031510) + geom_density(alpha =0.25, colour = "#4C0099", size = 1)+ scale_fill_manual(values = c( "#41E228", "#FF0000", "#FB0000", "#FF075A", "#FF07A5")) + coord_cartesian(xlim = c(0, 3)) + xlab("N0")
 N01.dens <- density(N0_run_18_pat_027_AMPL478031510)
 df1.dens <- data.frame(x = N01.dens$x, y = N01.dens$y)
 
@@ -685,6 +685,8 @@ plot_density_x<- function(lst)
 
 get_Y_as_in_lect <- function(y0, p)
 {
+  #y0<-2
+  #p<-0.5
   lst1 <- c()
   for (i in 1:48)
   {
@@ -703,6 +705,17 @@ get_Y_as_in_lect <- function(y0, p)
   d<-density(lst1)
   plot(d, xlab ="Number of amplicon 1", ylab="Density", main = "Simulated data")
   #print(sqrt(var(sort_y)))
+  totaldf <- data.frame(X= numeric(0), ind= integer(0))
+  totaldf<- appenddf(totaldf, lst1, 1)
+  totaldf$ind <- as.factor(totaldf$ind)
+  levels(totaldf$ind) <- c("N_AMPL1")
+  p <- ggplot(aes(x = X, fill = ind), data = totaldf) + geom_density(alpha =0.25, colour = "#4C0099", size = 1)+ scale_fill_manual(values = c("#41E228")) + 
+                        coord_cartesian(xlim = c(0, 1000)) + xlab("N")
+  N1.dens <- density(lst1)
+  df1.dens <- data.frame(x = N1.dens$x, y = N1.dens$y)  
+  p + geom_area(data = subset(df1.dens, x >= quantile(lst1, 0.025) & x <= quantile(lst1, 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25) 
+  
+  
   return(lst1)
 }
 
@@ -735,10 +748,12 @@ get_YZ_as_in_lect <- function(x, p1, p2)
 
 get_Y <- function(y0, eff1)
 {
+  #y0<-1
+  #eff1=1.7
   lst1 <- c()
   for (i in 1:48)
   {
-    scale <- rnorm(1, 0, 0.65) + 3
+    scale <- rnorm(1, 0, 0.65) + 2
     y <- y0 * scale + rnorm(1, 0, 0.005)
     for (j in 1:12)
     {
@@ -752,6 +767,20 @@ get_Y <- function(y0, eff1)
   d<-density(lst1)
   plot(d, xlab ="Number of amplicon 1", ylab="Density", main = "Simulated data")
   #print(sqrt(var(sort_y)))
+  
+  
+  totaldf <- data.frame(X= numeric(0), ind= integer(0))
+  totaldf<- appenddf(totaldf, lst1, 1)
+  totaldf$ind <- as.factor(totaldf$ind)
+  levels(totaldf$ind) <- c("N_AMPL1")
+  p <- ggplot(aes(x = X, fill = ind), data = totaldf) + geom_density(alpha =0.25, colour = "#4C0099", size = 1)+ scale_fill_manual(values = c("#41E228")) + 
+    coord_cartesian(xlim = c(0, 3000)) + xlab("N")
+  N1.dens <- density(lst1)
+  df1.dens <- data.frame(x = N1.dens$x, y = N1.dens$y)  
+  p + geom_area(data = subset(df1.dens, x >= quantile(lst1, 0.025) & x <= quantile(lst1, 0.975)), aes(x=x,y=y), fill = '#4C3099', alpha = 0.25) 
+  
+  
+  
   return(lst1)
 }
 
